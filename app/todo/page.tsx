@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getTodos } from "../actions";
+import { deleteTodo, getTodos } from "../actions";
 
 export default function Page() {
   const [todos, setTodos] = useState<
@@ -18,6 +18,14 @@ export default function Page() {
     fetchTodos();
   }, []); // Empty dependency array ensures this runs only once on component mount
 
+  const deleteTodoHandeler = async (id: string) => {
+    try {
+      await deleteTodo(id);
+      setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
@@ -41,6 +49,13 @@ export default function Page() {
               >
                 {todo.completed ? "Completed" : "Not Completed"}
               </span>
+
+              <button
+                onClick={() => deleteTodoHandeler(todo.id)}
+                className="text-red-500 hover:underline "
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>

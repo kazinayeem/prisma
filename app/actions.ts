@@ -47,3 +47,18 @@ export const getTodo = async (id: string) => {
     throw error;
   }
 };
+// del a todo
+export const deleteTodo = async (id: string) => {
+  try {
+    await prisma.todo.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return "Todo deleted successfully";
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+    throw error;
+  }
+};
